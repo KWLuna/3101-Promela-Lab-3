@@ -1,0 +1,66 @@
+never p1 {    /* !([] (((((((0<=sent)) && ((sent<=100))) && ((0<=received))) && ((received<=sent))) && ((0<=processed))) && ((processed<=(received/2))))) */
+T0_init:
+	do
+	:: atomic { (! ((((((((0<=sent)) && ((sent<=100))) && ((0<=received))) && ((received<=sent))) && ((0<=processed))) && ((processed<=(received/2)))))) -> assert(!(! ((((((((0<=sent)) && ((sent<=100))) && ((0<=received))) && ((received<=sent))) && ((0<=processed))) && ((processed<=(received/2))))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never p2 {    /* !([] (((isqr%4)==0))) */
+T0_init:
+	do
+	:: atomic { (! ((((isqr%4)==0)))) -> assert(!(! ((((isqr%4)==0))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never p3 {    /* !([] ((! ((processed>=10))) || ((isqr>=400)))) */
+T0_init:
+	do
+	:: atomic { (! (((! ((processed>=10))) || ((isqr>=400))))) -> assert(!(! (((! ((processed>=10))) || ((isqr>=400)))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never p4 {    /* !(<> ((isqr==900))) */
+accept_init:
+T0_init:
+	do
+	:: (! (((isqr==900)))) -> goto T0_init
+	od;
+}
+never p5 {    /* !(((sent<20)) U ((isqr==64))) */
+accept_init:
+T0_init:
+	do
+	:: (! (((isqr==64)))) -> goto T0_init
+	:: atomic { (! (((isqr==64))) && ! (((sent<20)))) -> assert(!(! (((isqr==64))) && ! (((sent<20))))) }
+	od;
+accept_all:
+	skip
+}
+never p6 {    /* !([] ((! ((sent>=50))) || (<> ((processed>=25))))) */
+T0_init:
+	do
+	:: (! ((! ((sent>=50)))) && ! (((processed>=25)))) -> goto accept_S4
+	:: (1) -> goto T0_init
+	od;
+accept_S4:
+	do
+	:: (! (((processed>=25)))) -> goto accept_S4
+	od;
+}
+never p7 {    /* !([] ((! ((sent==100))) || (<> (((received==100)) && ((processed==50)))))) */
+T0_init:
+	do
+	:: (! ((! ((sent==100)))) && ! ((((received==100)) && ((processed==50))))) -> goto accept_S4
+	:: (1) -> goto T0_init
+	od;
+accept_S4:
+	do
+	:: (! ((((received==100)) && ((processed==50))))) -> goto accept_S4
+	od;
+}
